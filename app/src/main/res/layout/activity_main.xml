@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Trilateration"
-        android:id="@+id/button"
+        android:id="@+id/trilateration_button"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="263dp"
         android:layout_below="@+id/distance_button"
