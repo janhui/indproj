@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    tools:context=".MainActivity" tools:ignore="MergeRootFrame" >
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Movement"
+        android:id="@+id/sensor_movement_button"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Distances"
+        android:id="@+id/distance_button"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="263dp"
+        android:layout_below="@+id/sensor_movement_button"
+        android:layout_alignEnd="@+id/sensor_movement_button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trilateration"
+        android:id="@+id/button"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="263dp"
+        android:layout_below="@+id/distance_button"
+        android:layout_alignEnd="@+id/distance_button" />
+
+</RelativeLayout>
