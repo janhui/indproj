@@ -40,6 +40,15 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+        findViewById(R.id.trilateration_button).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(MainActivity.this, TrilaterationActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
