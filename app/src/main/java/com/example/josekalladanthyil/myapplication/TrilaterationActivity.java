@@ -2,6 +2,8 @@ package com.example.josekalladanthyil.myapplication;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -21,6 +23,7 @@ public class TrilaterationActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_trilateration);
         beaconList = new ArrayList<FixedBeacon>();
         beaconManager = new BeaconManager(this);
         beaconManager.setRangingListener(new BeaconManager.RangingListener() {
@@ -30,9 +33,12 @@ public class TrilaterationActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.v("Trilateration","in trilat run ui");
                         // TODO: filters by my beacon ids --- get rid when not necessary
                         for (Beacon beacon : beacons) {
                             if (beacon.getMajor() == 170) {
+                                TextView t = (TextView) findViewById(R.id.trilateration_position_value);
+                                t.setText(beacon.getProximityUUID());
                                 beaconList.add(new FixedBeacon(beacon, new Position(0, 0)));
                             } else if (beacon.getMajor() == 61787) {
                                 beaconList.add(new FixedBeacon(beacon, new Position(0, 100)));
