@@ -5,18 +5,18 @@ package com.example.josekalladanthyil.myapplication;
  */
 //coordinate system
 public class Position {
-    private int X;
-    private int Y;
-    public Position(int X, int Y) {
+    private double X;
+    private double Y;
+    public Position(double X, double Y) {
         this.X = X;
         this.Y = Y;
     }
 
-    public int getY() {
+    public double getY() {
         return Y;
     }
 
-    public int getX() {
+    public double getX() {
         return X;
     }
 }

@@ -6,7 +6,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Movement"
+        android:text="Sensor Activity"
         android:id="@+id/sensor_movement_button"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="0dp"

@@ -33,7 +33,7 @@ public class FixedBeacon {
         this.position = position;
     }
 
-    public Double getDistance() {
+    public double getDistance() {
         return Utils.computeAccuracy(beacon);
     }
 }
