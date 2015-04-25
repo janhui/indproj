@@ -112,7 +112,7 @@ public class TrilaterationActivity extends Activity {
     }
 
 
-
+    // TODO: float to double conversion
     private Position calculatePosition(List<FixedBeacon> beaconList) {
         Position position;
         //p1 x y
@@ -180,13 +180,13 @@ public class TrilaterationActivity extends Activity {
         }
         double xval = (Math.pow(d1,2) - Math.pow(d2,2) + Math.pow(d,2))/(2*d);
         double yval = ((Math.pow(d1, 2) - Math.pow(d3, 2) + Math.pow(ival, 2) + Math.pow(jval, 2))/(2*jval)) - ((ival/jval)*xval);
-        double currentPositionX = 0d;
-        double currentPositionY = 0d;
+        float currentPositionX = 0f;
+        float currentPositionY = 0f;
         for (int i = 0; i < p1.length; i++) {
             double t1 = p1[i];
             double t2 = ex.get(i) * xval;
             double t3 = ey.get(i) * yval;
-            double tx = t1 + t2 + t3;
+            float tx = (float)(t1 + t2 + t3);
             if (i == 0) {
                 currentPositionX = tx;
             } else {

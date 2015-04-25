@@ -13,7 +13,7 @@ public class AcccelerometerPosition extends Position {
     private  float dY = 0;
     private  float dZ = 0;
 
-    public AcccelerometerPosition(double X, double Y, int cnt) {
+    public AcccelerometerPosition(float X, float Y, int cnt) {
         super(X, Y);
         this.x = (float) X;
         this.y = (float) Y;
