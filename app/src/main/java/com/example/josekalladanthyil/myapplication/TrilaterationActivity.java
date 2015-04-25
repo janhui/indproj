@@ -194,8 +194,6 @@ public class TrilaterationActivity extends Activity {
             }
         }
         return new Position(currentPositionX, currentPositionY);
-//        Utils.computeAccuracy(beaconList.get(0).getBeacon());
-//        return null;
     }
 
 

@@ -29,6 +29,10 @@
             android:screenOrientation="portrait"/>
         <service android:name="com.estimote.sdk.service.BeaconService"
             android:exported="false"/>
+        <activity
+            android:name=".SensorMovementActivity"
+            android:label="SensorMovement"
+            android:screenOrientation="portrait"/>
     </application>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
