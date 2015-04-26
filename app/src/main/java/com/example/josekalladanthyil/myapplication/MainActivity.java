@@ -49,6 +49,25 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+        findViewById(R.id.calibration_button).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(MainActivity.this, CalibrationAccel.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.where_is_waldo).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(MainActivity.this, WhereIsWaldo.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 

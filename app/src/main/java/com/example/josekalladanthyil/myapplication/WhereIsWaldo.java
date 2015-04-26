@@ -3,39 +3,60 @@ package com.example.josekalladanthyil.myapplication;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.Display;
+import android.widget.Gallery;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
-import com.estimote.sdk.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by josekalladanthyil on 11/04/15.
+ * Created by josekalladanthyil on 26/04/15.
  */
-public class TrilaterationActivity extends Activity {
-
-    private final String TAG = "TrilaterationActivity";
+public class WhereIsWaldo extends Activity {
+    HorizontalScrollView hsv;
+    ScrollView sv;
+    private final String TAG = "Where is Waldo";
     private BeaconManager beaconManager;
     private List<FixedBeacon> beaconList;
     private List<Integer> majorList;
+    int prevX;
+    int prevY;
     private static final int REQUEST_ENABLE_BT = 1234;
     private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
     private Position currentPosition;
-
+    int screenWidth;
+    int screenHeight;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trilateration);
+        setContentView(R.layout.activity_where_is_waldo);
+        hsv = (HorizontalScrollView)findViewById(R.id.horizontal_scroll_view);
+        sv = (ScrollView)findViewById(R.id.vertical_scroll_view);
+        scroll(hsv, 0, 0);
+        scroll(sv, 0, 0);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+        screenHeight = size.y;
         majorList = new ArrayList<>();
+        prevX = 0;
+        prevY = 0;
         beaconList = new ArrayList<FixedBeacon>();
         beaconManager = new BeaconManager(this);
         beaconManager.setRangingListener(new BeaconManager.RangingListener() {
@@ -68,15 +89,16 @@ public class TrilaterationActivity extends Activity {
                         }
                         Log.v(TAG, beaconList.size() + "");
                         if (beaconList.size() == 3) {
-                            Position p = calculatePosition(beaconList);
-                            TextView t = (TextView) findViewById(R.id.trilateration_position_value);
-                            t.setText(String.format("X: %s , Y: %s", p.getX(), p.getY()));
+                            Position p = Trilateration.calculatePosition(beaconList);
+                            prevX += Math.abs((int)((p.getX()*1000)-15000))*90;
+                            prevY += Math.abs((int)((p.getY()*1000)-15000))*90;
+                            scroll(sv, prevX, prevY);
+                            scroll(hsv,prevX, prevY);
                         }
                     }
                 });
             }
         });
-
     }
     @Override
     protected void onStart() {
@@ -103,7 +125,7 @@ public class TrilaterationActivity extends Activity {
                 try {
                     beaconManager.startRanging(ALL_ESTIMOTE_BEACONS_REGION);
                 } catch (RemoteException e) {
-                    Toast.makeText(TrilaterationActivity.this, "Cannot start ranging, something terrible happened",
+                    Toast.makeText(WhereIsWaldo.this, "Cannot start ranging, something terrible happened",
                             Toast.LENGTH_LONG).show();
                     Log.e(TAG, "Cannot start ranging", e);
                 }
@@ -112,88 +134,12 @@ public class TrilaterationActivity extends Activity {
     }
 
 
-    // TODO: float to double conversion
-    public Position calculatePosition(List<FixedBeacon> beaconList) {
-        Position position;
-        //p1 x y
-        double p1x = beaconList.get(0).getPosition().getX();
-        double p1y = beaconList.get(0).getPosition().getY();
-        //p2 x y
-        double p2x = beaconList.get(1).getPosition().getX();
-        double p2y = beaconList.get(1).getPosition().getY();
-//        p3 x yo
-        double p3x = beaconList.get(2).getPosition().getX();
-        double p3y = beaconList.get(2).getPosition().getY();
-//        distances
-        double d1 = beaconList.get(0).getDistance();
-        double d2 = beaconList.get(1).getDistance();
-        double d3 = beaconList.get(2).getDistance();
+    private void scroll(HorizontalScrollView hsv, int x, int y) {
+        hsv.scrollTo(x,y);
+    }
 
-        double[] p1 = {p1x,p1y};
-        double[] p2 = {p2x,p2y};
-        double[] p3 = {p3x,p3y};
-        double temp = 0;
-        double exx = 0;
-
-        ArrayList<Double> ex = new ArrayList<>();
-        ArrayList<Double> p3p1 = new ArrayList<>();
-
-        for (int i = 0; i<p1.length; i++) {
-            double t = p2[i] - p1[i];
-            temp += t*t;
-            p3p1.add(p3[i] - p1[i]);
-        }
-        for (int i = 0; i<p1.length; i++) {
-            double t = p2[i] - p1[i];
-            exx = t/Math.sqrt(temp);
-            ex.add(exx);
-        }
-        double ival = 0;
-        for(int i = 0; i<ex.size(); i++){
-            ival += ex.get(i) * p3p1.get(i);
-        }
-
-        ArrayList<Double> ey = new ArrayList<>();
-        double p3p1i = 0;
-        for(int i = 0; i < p3.length; i++) {
-            double t1 = p3[i];
-            double t2 = p1[i];
-            double t3 = ex.get(i) * ival;
-            double t = t1 - t2 - t3;
-            p3p1i += (t*t);
-        }
-
-        for(int i = 0; i < p3.length; i++) {
-            double t1 = p3[i];
-            double t2 = p1[i];
-            double t3 = ex.get(i) * ival;
-            double eyy = (t1 - t2 - t3)/Math.sqrt(p3p1i);
-            ey.add(eyy);
-        }
-        double d = Math.sqrt(temp);
-
-        double jval = 0;
-        for(int i = 0; i< ey.size(); i++) {
-            double t1 = ey.get(i);
-            double t2 = p3p1.get(i);
-            jval += t1*t2;
-        }
-        double xval = (Math.pow(d1,2) - Math.pow(d2,2) + Math.pow(d,2))/(2*d);
-        double yval = ((Math.pow(d1, 2) - Math.pow(d3, 2) + Math.pow(ival, 2) + Math.pow(jval, 2))/(2*jval)) - ((ival/jval)*xval);
-        float currentPositionX = 0f;
-        float currentPositionY = 0f;
-        for (int i = 0; i < p1.length; i++) {
-            double t1 = p1[i];
-            double t2 = ex.get(i) * xval;
-            double t3 = ey.get(i) * yval;
-            float tx = (float)(t1 + t2 + t3);
-            if (i == 0) {
-                currentPositionX = tx;
-            } else {
-                currentPositionY = tx;
-            }
-        }
-        return new Position(currentPositionX, currentPositionY);
+    private void scroll(ScrollView sv , int x, int y){
+        sv.scrollTo(x, y);
     }
 
 
