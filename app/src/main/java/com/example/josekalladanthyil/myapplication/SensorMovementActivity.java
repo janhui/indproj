@@ -16,9 +16,7 @@ import com.example.josekalladanthyil.myapplication.utils.Calibration;
  * Created by josekalladanthyil on 23/02/15.
  */
 public class SensorMovementActivity extends Activity implements SensorEventListener {
-
-    private static final int STEP_SIZE = 500;
-    private final int total_count = 50;
+    private final int SECOND = 1000;
 
     private SensorManager sensorManager;
     private Sensor senAccelerometer;
@@ -26,10 +24,12 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
     private TextView textView_Y;
     private TextView textview_position_x;
     private TextView textView_position_Y;
-//    TextView textView_Z;
-    private float last_x, last_y, last_z;
-    Button calibrate_accelerometer;
-    Calibration clickListener;
+    private float total_x, total_y;
+    private long last_update;
+    private int num_of_values;
+    private float total_accl_x, total_accl_y;
+    private Button calibrate_accelerometer;
+    private Calibration clickListener;
 
 
     @Override
@@ -37,6 +37,10 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensors);
 
+        total_accl_x = total_accl_y = 0f;
+        total_x = total_y = 0f;
+        last_update = 0l;
+        num_of_values = 0;
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
@@ -44,7 +48,6 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
         textView_Y = (TextView)findViewById(R.id.accelerometer_value_Y);
         textview_position_x = (TextView)findViewById(R.id.position_x);
         textView_position_Y = (TextView)findViewById(R.id.position_y);
-//        textView_Z = (TextView)findViewById(R.id.accelerometer_value_Z);
         calibrate_accelerometer = (Button)findViewById(R.id.calibrate_accelerometer);
         clickListener = new Calibration(this.senAccelerometer, sensorManager);
         calibrate_accelerometer.setOnClickListener(clickListener);
@@ -65,19 +68,35 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        Sensor mySensor = sensorEvent.sensor;
-        double diffTime = 0;
-        float x = 0f;
-        float y = 0f;
-        float z = 0f;
+        if(!clickListener.isCalibrated()) {
+            clickListener.runCalibration(sensorEvent);
+        }
+        float x;
+        float y;
 
-        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             //get values
             x = sensorEvent.values[0] - clickListener.getdX();
             y = sensorEvent.values[1] - clickListener.getdY();
-            z = sensorEvent.values[2] - clickListener.getdZ();
-            double curTime = System.currentTimeMillis();
+            long curTime = System.currentTimeMillis();
 
+            if(curTime - last_update > SECOND) {
+                float avg_x, avg_y, displacement_x, displacement_y;
+                total_x += x;
+                total_y += y;
+                num_of_values++;
+                avg_x = (float) total_x/num_of_values;
+                avg_y = (float) total_y/num_of_values;
+                displacement_x = getDisplacement(avg_x);
+                displacement_y = getDisplacement(avg_y);
+                total_x = total_y = 0f;
+                num_of_values = 0;
+                last_update = curTime;
+            } else {
+                total_x += x;
+                total_y += y;
+                num_of_values++;
+            }
 
             textView_X.setText(String.format("X: %s", x));
             textView_Y.setText(String.format("Y: %s", y));
@@ -86,8 +105,9 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
         }
     }
 
-
-
+    private float getDisplacement(float accl) {
+        return 0f;
+    }
 
 
     @Override

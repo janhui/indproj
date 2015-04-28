@@ -11,6 +11,7 @@ import android.view.View;
  */
 public class Calibration implements View.OnClickListener, SensorEventListener {
     private final int CALIBRATION_TIME = 1000;
+    private boolean calibrated;
     private Sensor accel;
     private SensorManager manager;
     private float accumulator_x;
@@ -26,6 +27,7 @@ public class Calibration implements View.OnClickListener, SensorEventListener {
         this.accumulator_x = 0;
         this.accumulator_y = 0;
         this.accumulator_z = 0;
+        this.calibrated = false;
     }
 
     @Override
@@ -35,6 +37,10 @@ public class Calibration implements View.OnClickListener, SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        runCalibration(event);
+    }
+
+    public void runCalibration(SensorEvent event) {
         long startTime = System.currentTimeMillis();
         int counter = 0;
         while (System.currentTimeMillis() - startTime < 500) {
@@ -43,10 +49,12 @@ public class Calibration implements View.OnClickListener, SensorEventListener {
             accumulator_z += event.values[2];
             counter++;
         }
+
         manager.unregisterListener(this);
         dX = accumulator_x/counter;
         dY = accumulator_y/counter;
         dZ = accumulator_z/counter;
+        calibrated = true;
     }
 
     @Override
@@ -55,6 +63,10 @@ public class Calibration implements View.OnClickListener, SensorEventListener {
 
     public float getdX() {
         return dX;
+    }
+
+    public boolean isCalibrated() {
+        return calibrated;
     }
 
     public float getdY() {

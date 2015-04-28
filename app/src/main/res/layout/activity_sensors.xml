@@ -6,13 +6,6 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ClearPosition"
-        android:id="@+id/clearPosition"
-        android:layout_gravity="right" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Calibrate Accelerometer"
         android:id="@+id/calibrate_accelerometer"
         android:checked="false" />
@@ -30,13 +23,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Y: "
         android:id="@+id/accelerometer_value_Y" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Z: "
-        android:id="@+id/accelerometer_value_Z" />
 
     <TextView
         android:layout_width="wrap_content"

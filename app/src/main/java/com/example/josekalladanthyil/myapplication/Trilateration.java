@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class Trilateration {
     // TODO: float to double conversion
+    //TODO: change this from static!
+
     public static Position calculatePosition(List<FixedBeacon> beaconList) {
         Position position;
         //p1 x y
