@@ -1,5 +1,8 @@
 package com.example.josekalladanthyil.myapplication;
 
+import com.example.josekalladanthyil.myapplication.utils.FixedBeacon;
+import com.example.josekalladanthyil.myapplication.utils.Position;
+
 import java.util.ArrayList;
 import java.util.List;
 

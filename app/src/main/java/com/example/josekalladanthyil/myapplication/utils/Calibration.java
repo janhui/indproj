@@ -1,4 +1,4 @@
-package com.example.josekalladanthyil.myapplication;
+package com.example.josekalladanthyil.myapplication.utils;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

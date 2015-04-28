@@ -36,17 +36,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calibration"
-        android:id="@+id/calibration_button"
-        android:layout_below="@+id/trilateration_button"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="where is waldo"
         android:id="@+id/where_is_waldo"
-        android:layout_below="@+id/calibration_button"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/trilateration_button" />
 
 </RelativeLayout>

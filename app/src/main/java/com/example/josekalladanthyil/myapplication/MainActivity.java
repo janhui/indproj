@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent;
                 intent = new Intent(MainActivity.this, ListBeaconsActivity.class);
-                intent.putExtra(ListBeaconsActivity.EXTRAS_TARGET_ACTIVITY, DistanceBeaconActivity.class.getName());
+                intent.putExtra(ListBeaconsActivity.EXTRAS_TARGET_ACTIVITY, ListBeaconsActivity.class.getName());
                 startActivity(intent);
             }
         });
@@ -49,15 +49,7 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        findViewById(R.id.calibration_button).setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                Intent intent;
-                intent = new Intent(MainActivity.this, CalibrationAccel.class);
-                startActivity(intent);
-            }
-        });
         findViewById(R.id.where_is_waldo).setOnClickListener(new View.OnClickListener() {
 
             @Override

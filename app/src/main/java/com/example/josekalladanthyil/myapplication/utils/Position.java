@@ -1,4 +1,4 @@
-package com.example.josekalladanthyil.myapplication;
+package com.example.josekalladanthyil.myapplication.utils;
 
 /**
  * Created by josekalladanthyil on 11/04/15.

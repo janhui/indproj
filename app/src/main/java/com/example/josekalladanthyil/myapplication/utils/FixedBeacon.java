@@ -1,4 +1,4 @@
-package com.example.josekalladanthyil.myapplication;
+package com.example.josekalladanthyil.myapplication.utils;
 
 import com.estimote.sdk.*;
 import com.estimote.sdk.Utils;
@@ -9,7 +9,7 @@ import com.estimote.sdk.Utils;
 public class FixedBeacon {
     private  Beacon beacon;
     //make it changeable!!
-    private  Position position;
+    private Position position;
 
     public FixedBeacon(Beacon beacon, Position position) {
         this.beacon = beacon;

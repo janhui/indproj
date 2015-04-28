@@ -5,21 +5,18 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.Display;
-import android.widget.Gallery;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.example.josekalladanthyil.myapplication.utils.FixedBeacon;
+import com.example.josekalladanthyil.myapplication.utils.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +88,7 @@ public class WhereIsWaldo extends Activity {
                         if (beaconList.size() == 3) {
                             Position p = Trilateration.calculatePosition(beaconList);
                             prevX += Math.abs((int)((p.getX()*1000)-15000))*90;
+
                             prevY += Math.abs((int)((p.getY()*1000)-15000))*90;
                             scroll(sv, prevX, prevY);
                             scroll(hsv,prevX, prevY);
