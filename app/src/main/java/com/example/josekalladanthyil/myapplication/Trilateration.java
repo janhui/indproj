@@ -16,14 +16,14 @@ public class Trilateration {
     public static Position calculatePosition(List<FixedBeacon> beaconList) {
         Position position;
         //p1 x y
-        double p1x = beaconList.get(0).getPosition().getX();
-        double p1y = beaconList.get(0).getPosition().getY();
+        float p1x = beaconList.get(0).getPosition().getX();
+        float p1y = beaconList.get(0).getPosition().getY();
         //p2 x y
-        double p2x = beaconList.get(1).getPosition().getX();
-        double p2y = beaconList.get(1).getPosition().getY();
+        float p2x = beaconList.get(1).getPosition().getX();
+        float p2y = beaconList.get(1).getPosition().getY();
 //        p3 x yo
-        double p3x = beaconList.get(2).getPosition().getX();
-        double p3y = beaconList.get(2).getPosition().getY();
+        float p3x = beaconList.get(2).getPosition().getX();
+        float p3y = beaconList.get(2).getPosition().getY();
 //        distances
         double d1 = beaconList.get(0).getDistance();
         double d2 = beaconList.get(1).getDistance();
