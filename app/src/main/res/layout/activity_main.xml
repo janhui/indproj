@@ -36,7 +36,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="where is waldo"
+        android:text="where is waldo trilat"
         android:id="@+id/where_is_waldo"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/trilateration_button" />
@@ -44,8 +44,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="where is waldo both"
-        android:id="@+id/where_is_waldo_both"
+        android:text="where is waldo sensor"
+        android:id="@+id/where_is_waldo_sensor"
         android:layout_below="@+id/where_is_waldo"
         android:layout_alignEnd="@+id/trilateration_button" />
 

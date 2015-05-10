@@ -17,6 +17,7 @@ import com.example.josekalladanthyil.myapplication.utils.Position;
  * Created by josekalladanthyil on 23/02/15.
  */
 public class SensorMovementActivity extends Activity implements SensorEventListener {
+    private final float ERROR_VALUE = 0.15f;
     private final int SECOND = 1000;
 
     private SensorManager sensorManager;
@@ -70,11 +71,13 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+
+        float accl_x;
+        float accl_y;
+
         if(!clickListener.isCalibrated()) {
             clickListener.runCalibration(sensorEvent);
         }
-        float accl_x;
-        float accl_y;
 
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             //get values
@@ -84,18 +87,18 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
 
             //last update was more than a second ago... then get avg acceleration and integrate!
             if(curTime - last_update > SECOND) {
-                float avg_x, avg_y, displacement_x, displacement_y;
+                float avg_x, avg_y;
                 total_x += accl_x;
                 total_y += accl_y;
                 num_of_values++;
                 avg_x = (float) total_x/num_of_values;
                 avg_y = (float) total_y/num_of_values;
-//                displacement_x = getDisplacement(avg_x);
-//                displacement_y = getDisplacement(avg_y);
                 float curr_x = currentPosition.getX();
                 float curr_y = currentPosition.getY();
-                currentPosition = new Position(curr_x+avg_x, curr_y+avg_y);
 
+                if (Math.abs(avg_x) > ERROR_VALUE || Math.abs(avg_y) > ERROR_VALUE) {
+                    currentPosition = new Position(curr_x + avg_x, curr_y + avg_y);
+                }
 
                 //resets values
                 total_x = total_y = 0f;
@@ -109,8 +112,6 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
                 num_of_values++;
             }
             setTextviewFields(accl_x, accl_y);
-
-
         }
     }
 

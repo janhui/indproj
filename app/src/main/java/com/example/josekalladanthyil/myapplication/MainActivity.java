@@ -55,7 +55,16 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent;
-                intent = new Intent(MainActivity.this, WhereIsWaldo.class);
+                intent = new Intent(MainActivity.this, WhereIsWaldoTrilat.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.where_is_waldo_sensor).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(MainActivity.this, WhereIsWaldoSensor.class);
                 startActivity(intent);
             }
         });

@@ -34,7 +34,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".WhereIsWaldo"
+            android:name=".WhereIsWaldoTrilat"
             android:label="Hack!"
             android:screenOrientation="portrait"/>
 
