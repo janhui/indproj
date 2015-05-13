@@ -70,7 +70,7 @@ public class TrilaterationActivity extends Activity {
                         if (beaconList.size() == 3) {
                             Position p = Trilateration.calculatePosition(beaconList);
                             TextView t = (TextView) findViewById(R.id.trilateration_position_value);
-                            t.setText(String.format("X: %s , Y: %s", p.getX(), p.getY()));
+                            t.setText(String.format("X: %s , Y: %s", p.getX()*1000*90, p.getY()*1000*90));
                         }
                     }
                 });

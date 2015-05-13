@@ -39,11 +39,7 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensors);
 
-        currentPosition = new Position(0f,0f);
-        total_accl_x = total_accl_y = 0f;
-        total_x = total_y = 0f;
-        last_update = 0l;
-        num_of_values = 0;
+        init();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
@@ -115,22 +111,27 @@ public class SensorMovementActivity extends Activity implements SensorEventListe
         }
     }
 
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        //no op
+    }
+
+
+    // set up all the values§
+    private void init() {
+        currentPosition = new Position(0f,0f);
+        total_accl_x = total_accl_y = 0f;
+        total_x = total_y = 0f;
+        last_update = 0l;
+        num_of_values = 0;
+    }
+
     private void setTextviewFields(float accl_x, float accl_y) {
         this.textview_position_X.setText("Position X: " + currentPosition.getX());
         this.textView_position_Y.setText("Position Y: " + currentPosition.getY());
         textView_X.setText(String.format("Accl X: %s", accl_x));
         textView_Y.setText(String.format("Accl Y: %s", accl_y));
     }
-
-    private float getDisplacement(float accl) {
-        return 0f;
-    }
-
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
 
 }

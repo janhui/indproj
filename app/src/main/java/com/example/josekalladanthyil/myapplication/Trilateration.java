@@ -12,6 +12,7 @@ import java.util.List;
 public class Trilateration {
     // TODO: float to double conversion
     //TODO: change this from static!
+    private static int ZERO_ERROR = 15;
 
     public static Position calculatePosition(List<FixedBeacon> beaconList) {
         Position position;
@@ -88,9 +89,9 @@ public class Trilateration {
             double t3 = ey.get(i) * yval;
             float tx = (float)(t1 + t2 + t3);
             if (i == 0) {
-                currentPositionX = tx;
+                currentPositionX = tx - ZERO_ERROR;
             } else {
-                currentPositionY = tx;
+                currentPositionY = tx - ZERO_ERROR;
             }
         }
         return new Position(currentPositionX, currentPositionY);

@@ -89,8 +89,8 @@ public class WhereIsWaldoTrilat extends Activity {
                         if (beaconList.size() == 3) {
                             Position p = Trilateration.calculatePosition(beaconList);
                             //need to tweak this!
-                            prevX += Math.abs((int)((p.getX()*1000)-15000))*90;
-                            prevY += Math.abs((int)((p.getY()*1000)-15000))*90;
+                            prevX += Math.abs((int)(p.getX()*1000))*90;
+                            prevY += Math.abs((int)(p.getY()*1000))*90;
                             scroll(sv, prevX, prevY);
                             scroll(hsv,prevX, prevY);
                         }
