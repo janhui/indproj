@@ -95,7 +95,11 @@ public class WhereIsWaldoSensor extends Activity implements SensorEventListener 
 
                 //scroll to new position
                 if (Math.abs(avg_x) > ERROR_VALUE || Math.abs(avg_y) > ERROR_VALUE) {
-                    currentPosition = new Position(curr_x + avg_x, curr_y + avg_y);
+                    float new_x = curr_x + avg_x;
+                    float new_y = curr_y + avg_y;
+                    if(new_x > 0 && new_y > 0){
+                        currentPosition = new Position(new_x, new_y);
+                    }
                     scroll(currentPosition);
                 }
 

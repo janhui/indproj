@@ -49,4 +49,12 @@
         android:layout_below="@+id/where_is_waldo"
         android:layout_alignEnd="@+id/trilateration_button" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="canvas"
+        android:id="@+id/button_canvas"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

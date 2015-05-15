@@ -2,6 +2,7 @@ package com.example.josekalladanthyil.myapplication;
 
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -65,6 +66,16 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent;
                 intent = new Intent(MainActivity.this, WhereIsWaldoSensor.class);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.button_canvas).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(MainActivity.this, CanvasActivity.class);
                 startActivity(intent);
             }
         });
