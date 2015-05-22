@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.Utils;
+import com.example.josekalladanthyil.myapplication.utils.FixedBeacon;
+import com.example.josekalladanthyil.myapplication.utils.Position;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,8 +61,9 @@ public class LeDeviceListAdapter extends BaseAdapter {
     }
 
     private void bind(Beacon beacon, View view) {
+        FixedBeacon fb = new FixedBeacon(beacon, new Position(0,0));
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.macTextView.setText(String.format("MAC: %s (%.2fm)", beacon.getMacAddress(), Utils.computeAccuracy(beacon)));
+        holder.macTextView.setText(String.format("MAC: %s (%.2fm)", beacon.getMacAddress(), fb.getDistance()));
         holder.majorTextView.setText("Major: " + beacon.getMajor());
         holder.minorTextView.setText("Minor: " + beacon.getMinor());
         holder.measuredPowerTextView.setText("MPower: " + beacon.getMeasuredPower());

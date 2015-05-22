@@ -3,10 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-
     defaultConfig {
         applicationId "com.example.josekalladanthyil.myapplication"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -17,11 +16,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        jcenter()
+    }
     packagingOptions {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
-
+    productFlavors {
+    }
 }
 
 dependencies {
@@ -29,4 +32,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile project(':estimote-sdk-preview')
     compile 'com.firebase:firebase-client-android:2.2.4+'
+    compile 'org.altbeacon:android-beacon-library:2+'
+    compile project(':libs:opencv')
 }

@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/BleDistanceApp.iml" filepath="$PROJECT_DIR$/BleDistanceApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/estimote-sdk-preview/estimote-sdk-preview.iml" filepath="$PROJECT_DIR$/estimote-sdk-preview/estimote-sdk-preview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/libs.iml" filepath="$PROJECT_DIR$/libs/libs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/opencv/opencv.iml" filepath="$PROJECT_DIR$/libs/opencv/opencv.iml" />
     </modules>
   </component>
 </project>

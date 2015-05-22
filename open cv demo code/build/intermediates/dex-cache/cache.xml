@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/josekalladanthyil/Documents/Final year/individualProject/BleDistanceApp/open cv demo code/app/build/intermediates/exploded-aar/open cv demo code.libs/opencv/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="0dd73feaafa11fa14dd5283afab96f8aeb077570">
+        <dex dex="/Users/josekalladanthyil/Documents/Final year/individualProject/BleDistanceApp/open cv demo code/app/build/intermediates/pre-dexed/debug/classes-84645bedb9f6fe2e4a66a6c72b5654bfed38cb93.jar" />
+    </item>
+
+</items>

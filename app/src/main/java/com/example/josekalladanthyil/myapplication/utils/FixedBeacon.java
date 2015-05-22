@@ -32,8 +32,13 @@ public class FixedBeacon {
     public void setPosition(Position position) {
         this.position = position;
     }
-
+// y = mx + c where m = 0.563 and c = 0.651
     public float getDistance() {
-        return (float) Utils.computeAccuracy(beacon);
+        double rssi = beacon.getRssi();
+        double power = beacon.getMeasuredPower();
+        float m = 1.4995f;
+        float c = -0.9355f;
+        return (float) (m*(rssi/power) + c);
+//        return (float) Utils.computeAccuracy(beacon);
     }
 }

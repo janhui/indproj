@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CameraBridgeViewBase"><attr format="boolean" name="show_fps"/><attr format="integer" name="camera_id"><enum name="any" value="-1"/><enum name="back" value="99"/><enum name="front" value="98"/></attr></declare-styleable>
+    <!-- From: file:/Users/josekalladanthyil/Documents/Final%20year/individualProject/BleDistanceApp/open%20cv%20demo%20code/app/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- From: file:/Users/josekalladanthyil/Documents/Final%20year/individualProject/BleDistanceApp/open%20cv%20demo%20code/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="action_cannyedges">Canny Edges</string>
+    <string name="action_colourcontour">Colour Contour</string>
+    <string name="action_colourquad">Colour Quad</string>
+    <string name="action_facedetect">Face Detect</string>
+    <string name="action_gftt">Good Features To Track</string>
+    <string name="action_houghcircles">Hough Circles</string>
+    <string name="action_houghlines">Hough Lines</string>
+    <string name="action_info">Info (web site)</string>
+    <string name="action_opflow">Optical Flow</string>
+    <string name="action_rgbpreview">RGB Preview</string>
+    <string name="action_swapcamera">Swap Camera</string>
+    <string name="action_toggletitles">Toggle Titles</string>
+    <string name="app_name">OpenCVd2</string>
+    <!-- From: file:/Users/josekalladanthyil/Documents/Final%20year/individualProject/BleDistanceApp/open%20cv%20demo%20code/app/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+</resources>

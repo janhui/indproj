@@ -1,1 +1,2 @@
 include ':app', ':estimote-sdk-preview'
+include ':libs:opencv'

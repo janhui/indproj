@@ -17,6 +17,7 @@ import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 import com.example.josekalladanthyil.myapplication.utils.FixedBeacon;
 import com.example.josekalladanthyil.myapplication.utils.Position;
+import com.example.josekalladanthyil.myapplication.utils.Trilateration;
 
 import java.util.ArrayList;
 import java.util.List;
