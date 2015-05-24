@@ -1,82 +1,12 @@
 package com.example.josekalladanthyil.myapplication;
 
-/*
-This code to go into CameraBridgeViewBase in 
-order to scale the bitmap to the size of the screen
- 
-The file is at:
- 
-[your path to the sdk]\OpenCV-2.4.4-android-sdk\sdk\java\src\org\opencv\android
 
-   protected void deliverAndDrawFrame(CvCameraViewFrame frame) {
-       Mat modified;
-
-       if (mListener != null) {
-           modified = mListener.onCameraFrame(frame);
-       } else {
-           modified = frame.rgba();
-       }
-
-       boolean bmpValid = true;
-       if (modified != null) {
-           try {
-               Utils.matToBitmap(modified, mCacheBitmap);
-           } catch(Exception e) {
-               Log.e(TAG, "Mat type: " + modified);
-               Log.e(TAG, "Bitmap type: " + mCacheBitmap.getWidth() + "*" + mCacheBitmap.getHeight());
-               Log.e(TAG, "Utils.matToBitmap() throws an exception: " + e.getMessage());
-               bmpValid = false;
-           }
-       }
-
-       if (bmpValid && mCacheBitmap != null) {
-           Canvas canvas = getHolder().lockCanvas();
-           if (canvas != null) {
-               canvas.drawColor(0, android.graphics.PorterDuff.Mode.CLEAR);
-               
-               
-               /////////////////////////////////////////////////////
-               ////// THIS IS THE CHANGED PART /////////////////////
-               int width = mCacheBitmap.getWidth();
-               int height = mCacheBitmap.getHeight();
-               float scaleWidth = ((float) canvas.getWidth()) / width;
-               float scaleHeight = ((float) canvas.getHeight()) / height;
-               float fScale = Math.min(scaleHeight,  scaleWidth);
-               // CREATE A MATRIX FOR THE MANIPULATION
-               Matrix matrix = new Matrix();
-               // RESIZE THE BITMAP
-               matrix.postScale(fScale, fScale);
-
-               /////////////////////////////////////////////////////
-
-               // RECREATE THE NEW BITMAP
-               Bitmap resizedBitmap = Bitmap.createBitmap(mCacheBitmap, 0, 0, width, height, matrix, false);
-               
-               canvas.drawBitmap(resizedBitmap, (canvas.getWidth() - resizedBitmap.getWidth()) / 2, (canvas.getHeight() - resizedBitmap.getHeight()) / 2, null);
-               if (mFpsMeter != null) {
-                   mFpsMeter.measure();
-                   mFpsMeter.draw(canvas, 20, 30);
-               }
-               getHolder().unlockCanvasAndPost(canvas);
-           }
-       }
-   }
-
-
-
-*
-*
-*/
-
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -104,20 +34,15 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
-import org.opencv.utils.Converters;
 import org.opencv.video.Video;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class Opencvd2Activity extends Activity implements CvCameraViewListener {
@@ -134,7 +59,7 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
 
     private CascadeClassifier mCascade;
 
-    private boolean bShootNow = false, bDisplayTitle = true, bFirstFaceSaved = false;
+    private boolean bDisplayTitle = true;
 
     private byte[] byteColourTrackCentreHue;
 
@@ -147,8 +72,7 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
     private int x, y, radius, iMinRadius, iMaxRadius, iCannyLowerThreshold,
             iCannyUpperThreshold, iAccumulator, iLineThickness = 3,
             iHoughLinesThreshold = 50, iHoughLinesMinLineSize = 20,
-            iHoughLinesGap = 20, iMaxFaceHeight, iMaxFaceHeightIndex,
-            iFileOrdinal = 0, iCamera = 0, iNumberOfCameras = 0, iGFFTMax = 40,
+            iHoughLinesGap = 20, iNumberOfCameras = 0, iGFFTMax = 40,
             iContourAreaMin = 1000;
 
     private JavaCameraView mOpenCvCameraView0;
@@ -157,29 +81,26 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
     private List<Byte> byteStatus;
     private List<Integer> iHueMap, channels;
     private List<Float> ranges;
-    private List<Point> pts, corners, cornersThis, cornersPrev;
+    private List<Point> cornersThis, cornersPrev;
     private List<MatOfPoint> contours;
 
     private long lFrameCount = 0, lMilliStart = 0, lMilliNow = 0, lMilliShotTime = 0;
 
     private Mat mRgba, mGray, mIntermediateMat, mMatRed, mMatGreen, mMatBlue, mROIMat,
             mMatRedInv, mMatGreenInv, mMatBlueInv, mHSVMat, mErodeKernel, mContours,
-            lines, mFaceDest, mFaceResized, matOpFlowPrev, matOpFlowThis,
-            matFaceHistogramPrevious, matFaceHistogramThis, mHist;
+            lines, matOpFlowPrev, matOpFlowThis;
 
-    private MatOfFloat mMOFerr, MOFrange;
+    private MatOfFloat mMOFerr;
     private MatOfRect faces;
     private MatOfByte mMOBStatus;
     private MatOfPoint2f mMOP2f1, mMOP2f2, mMOP2fptsPrev, mMOP2fptsThis, mMOP2fptsSafe;
     private MatOfPoint2f mApproxContour;
     private MatOfPoint MOPcorners;
-    private MatOfInt MOIone, histSize;
 
-    private Rect rect, rDest;
 
     private Scalar colorRed, colorGreen;
-    private Size sSize, sSize3, sSize5, sMatSize;
-    private String string, sShotText;
+    private Size sSize3, sSize5, sMatSize;
+    private String string;
 
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -357,13 +278,13 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
         colorRed = new Scalar(255, 0, 0, 255);
         colorGreen = new Scalar(0, 255, 0, 255);
         contours = new ArrayList<MatOfPoint>();
-        corners = new ArrayList<Point>();
+//        corners = new ArrayList<Point>();
         cornersThis = new ArrayList<Point>();
         cornersPrev = new ArrayList<Point>();
 
         faces = new MatOfRect();
 
-        histSize = new MatOfInt(25);
+//        histSize = new MatOfInt(25);
 
         iHueMap = new ArrayList<Integer>();
         iHueMap.add(0);
@@ -372,7 +293,7 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
 
         mApproxContour = new MatOfPoint2f();
         mContours = new Mat();
-        mHist = new Mat();
+//        mHist = new Mat();
         mGray = new Mat();
         mHSVMat = new Mat();
         mIntermediateMat = new Mat();
@@ -382,9 +303,9 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
         mMatRedInv = new Mat();
         mMatGreenInv = new Mat();
         mMatBlueInv = new Mat();
-        MOIone = new MatOfInt(0);
+//        MOIone = new MatOfInt(0);
 
-        MOFrange = new MatOfFloat(0f, 256f);
+//        MOFrange = new MatOfFloat(0f, 256f);
         mMOP2f1 = new MatOfPoint2f();
         mMOP2f2 = new MatOfPoint2f();
         mMOP2fptsPrev = new MatOfPoint2f();
@@ -395,10 +316,10 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
         MOPcorners = new MatOfPoint();
         mRgba = new Mat();
         mROIMat = new Mat();
-        mFaceDest = new Mat();
-        mFaceResized = new Mat();
-        matFaceHistogramPrevious = new Mat();
-        matFaceHistogramThis = new Mat();
+//        mFaceDest = new Mat();
+//        mFaceResized = new Mat();
+//        matFaceHistogramPrevious = new Mat();
+//        matFaceHistogramThis = new Mat();
         matOpFlowThis = new Mat();
         matOpFlowPrev = new Mat();
 
@@ -406,16 +327,16 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
         pt1 = new Point(0, 0);
         pt2 = new Point(0, 0);
 
-        pts = new ArrayList<Point>();
+//        pts = new ArrayList<Point>();
 
         ranges = new ArrayList<Float>();
         ranges.add(50.0f);
         ranges.add(256.0f);
-        rect = new Rect();
-        rDest = new Rect();
+//        rect = new Rect();
+//        rDest = new Rect();
 
         sMatSize = new Size();
-        sSize = new Size();
+//        sSize = new Size();
         sSize3 = new Size(3, 3);
         sSize5 = new Size(5, 5);
 
@@ -607,6 +528,7 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
                 contours.clear();
 
                 Imgproc.findContours(mHSVMat, contours, mContours, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+                contours.get(0);
 
                 for (x = 0; x < contours.size(); x++) {
                     d = Imgproc.contourArea(contours.get(x));
@@ -633,6 +555,14 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
 
                     }
                 }
+//                List<Moments> mu = new ArrayList<Moments>(Contours.size());
+//                for (int i = 0; i < Contours.size(); i++) {
+//                    mu.add(i, Imgproc.moments(Contours.get(i), false));
+//                    Moments p = mu.get(i);
+//                    int x = (int) (p.get_m10() / p.get_m00());
+//                    int y = (int) (p.get_m01() / p.get_m00());
+//                    Core.circle(rgbaImage, new Point(x, y), 4, new Scalar(255,49,0,255));
+//                }
 
                 if (bDisplayTitle)
                     ShowTitle("Colour Contours", 1, colorGreen);
@@ -728,31 +658,16 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
             ShowTitle(string, 2, colorGreen);
         }
 
-        if (bShootNow) {
-            // get the time of the attempt to save a screenshot
-            lMilliShotTime = System.currentTimeMillis();
-            bShootNow = false;
 
-            // try it, and set the screen text accordingly.
-            // this text is shown at the end of each frame until 
-            // 1.5 seconds has elapsed
-            if (SaveImage(mRgba)) {
-                sShotText = "SCREENSHOT SAVED";
-            } else {
-                sShotText = "SCREENSHOT FAILED";
-            }
-
-        }
-
-        if (System.currentTimeMillis() - lMilliShotTime < 1500)
-            ShowTitle(sShotText, 3, colorRed);
+//        if (System.currentTimeMillis() - lMilliShotTime < 1500)
+//            ShowTitle(sShotText, 3, colorRed);
 
         return mRgba;
     }
 
     public boolean onTouchEvent(final MotionEvent event) {
 
-        bShootNow = true;
+//        bShootNow = true;
         return false; // don't need more than one touch event
 
     }
@@ -776,43 +691,6 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
         Imgproc.line(mat, pt1, pt2, color, iLineThickness - 1);
 
     }
-
-
-    public Mat getHistogram(Mat mat) {
-        Imgproc.calcHist(Arrays.asList(mat), MOIone, new Mat(), mHist, histSize, MOFrange);
-
-        Core.normalize(mHist, mHist);
-
-        return mHist;
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    public boolean SaveImage(Mat mat) {
-
-        Imgproc.cvtColor(mat, mIntermediateMat, Imgproc.COLOR_RGBA2BGR, 3);
-
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        String filename = "OpenCV_";
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        Date date = new Date(System.currentTimeMillis());
-        String dateString = fmt.format(date);
-        filename += dateString + "-" + iFileOrdinal;
-        filename += ".png";
-
-        File file = new File(path, filename);
-
-        Boolean bool = null;
-        filename = file.toString();
-        bool = Imgcodecs.imwrite(filename, mIntermediateMat);
-
-        //if (bool == false)
-        //Log.d("Baz", "Fail writing image to external storage");
-
-        return bool;
-
-    }
-
 
     private void ShowTitle(String s, int iLineNum, Scalar color) {
         Imgproc.putText(mRgba, s, new Point(10, (int) (dTextScaleFactor * 60 * iLineNum)),
