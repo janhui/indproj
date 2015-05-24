@@ -127,9 +127,6 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
     public static final int VIEW_MODE_HOUGHLINES = 2;
     public static final int VIEW_MODE_CANNY = 3;
     public static final int VIEW_MODE_COLCONTOUR = 4;
-    public static final int VIEW_MODE_FACEDETECT = 5;
-    public static final int VIEW_MODE_YELLOW_QUAD_DETECT = 6;
-    public static final int VIEW_MODE_GFTT = 7;
     public static final int VIEW_MODE_OPFLOW = 8;
 
 
@@ -333,49 +330,14 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
             viewMode = VIEW_MODE_COLCONTOUR;
             lFrameCount = 0;
             lMilliStart = 0;
-        } else if (item.getItemId() == R.id.action_facedetect) {
-            viewMode = VIEW_MODE_FACEDETECT;
-            lFrameCount = 0;
-            lMilliStart = 0;
-            bFirstFaceSaved = false;
-        } else if (item.getItemId() == R.id.action_colourquad) {
-            viewMode = VIEW_MODE_YELLOW_QUAD_DETECT;
-            lFrameCount = 0;
-            lMilliStart = 0;
-        } else if (item.getItemId() == R.id.action_gftt) {
-            viewMode = VIEW_MODE_GFTT;
-            lFrameCount = 0;
-            lMilliStart = 0;
         } else if (item.getItemId() == R.id.action_opflow) {
             viewMode = VIEW_MODE_OPFLOW;
             lFrameCount = 0;
             lMilliStart = 0;
-        } else if (item.getItemId() == R.id.action_toggletitles) {
-            if (bDisplayTitle == true)
-                bDisplayTitle = false;
-            else
-                bDisplayTitle = true;
-        } else if (item.getItemId() == R.id.action_swapcamera) {
-            if (iNumberOfCameras > 1) {
-                if (iCamera == 0) {
-                    mOpenCvCameraView0.setVisibility(SurfaceView.GONE);
-                    mOpenCvCameraView1 = (JavaCameraView) findViewById(R.id.java_surface_view1);
-                    mOpenCvCameraView1.setCvCameraViewListener(this);
-                    mOpenCvCameraView1.setVisibility(SurfaceView.VISIBLE);
-
-                    iCamera = 1;
-                } else {
-                    mOpenCvCameraView1.setVisibility(SurfaceView.GONE);
-                    mOpenCvCameraView0 = (JavaCameraView) findViewById(R.id.java_surface_view0);
-                    mOpenCvCameraView0.setCvCameraViewListener(this);
-                    mOpenCvCameraView0.setVisibility(SurfaceView.VISIBLE);
-
-                    iCamera = 0;
-                }
             } else
                 Toast.makeText(getApplicationContext(), "Sadly, your device does not have a second camera",
                         Toast.LENGTH_LONG).show();
-        }
+//        }
 
         return true;
     }
@@ -676,166 +638,6 @@ public class Opencvd2Activity extends Activity implements CvCameraViewListener {
                     ShowTitle("Colour Contours", 1, colorGreen);
 
                 break;
-
-
-            case VIEW_MODE_YELLOW_QUAD_DETECT:
-
-                // Convert the image into an HSV image
-
-                Imgproc.cvtColor(mRgba, mHSVMat, Imgproc.COLOR_RGB2HSV, 3);
-
-                Core.inRange(mHSVMat, new Scalar(byteColourTrackCentreHue[0] - 12, 100, 100),
-                        new Scalar(byteColourTrackCentreHue[0] + 12, 255, 255), mHSVMat);
-
-                contours.clear();
-
-                Imgproc.findContours(mHSVMat, contours, mContours, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-
-                for (x = 0; x < contours.size(); x++) {
-                    d = Imgproc.contourArea(contours.get(x));
-
-                    if (d > iContourAreaMin) {
-                        // get an approximation of the contour (last but one param is the min required
-                        // distance between the real points and the new approximation (in pixels)
-
-                        contours.get(x).convertTo(mMOP2f1, CvType.CV_32FC2);
-
-                        Imgproc.approxPolyDP(mMOP2f1, mMOP2f2, 15, true);
-
-                        // convert back to MatOfPoint and put it back in the list
-                        mMOP2f2.convertTo(contours.get(x), CvType.CV_32S);
-
-                        if (contours.get(x).rows() == 4) {
-
-                            Converters.Mat_to_vector_Point2f(contours.get(x), pts);
-
-                            Imgproc.drawContours(mRgba, contours, x, colorRed, iLineThickness);
-
-                            Imgproc.line(mRgba, pts.get(0), pts.get(2), colorRed, iLineThickness);
-                            Imgproc.line(mRgba, pts.get(1), pts.get(3), colorRed, iLineThickness);
-                        }
-                    }
-                }
-
-                if (bDisplayTitle)
-                    ShowTitle("Colour quadrilateral", 1, colorGreen);
-
-                break;
-
-
-            case VIEW_MODE_FACEDETECT:
-
-                // Convert the image into a gray image
-
-                Imgproc.cvtColor(mRgba, mGray, Imgproc.COLOR_RGBA2GRAY);
-
-                rDest.x = 5;
-                rDest.y = 5;
-                rDest.width = 100;
-                rDest.height = 100;
-
-                mFaceDest = mRgba.submat(rDest);
-                iMaxFaceHeight = 0;
-                iMaxFaceHeightIndex = -1;
-
-                if (mCascade != null) {
-                    int height = mGray.rows();
-                    double faceSize = (double) height * 0.25;
-
-                    sSize.width = faceSize;
-                    sSize.height = faceSize;
-
-                    mCascade.detectMultiScale(mGray, faces, 1.1, 2, 2, sSize, new Size());
-
-                    Rect[] facesArray = faces.toArray();
-
-                    for (int i = 0; i < facesArray.length; i++) {
-
-                        // draw the rectangle itself
-                        Imgproc.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), colorRed, 3);
-                        if (iMaxFaceHeight < facesArray[i].height) {
-                            iMaxFaceHeight = facesArray[i].height;
-                            iMaxFaceHeightIndex = i;
-                        }
-                    }
-
-                    // now save the biggest face to a file
-                    if (iMaxFaceHeight > 0) {
-                        // we have at least one face
-                        rect = facesArray[iMaxFaceHeightIndex];
-
-                        // get the submat of the rect containing the face
-                        mROIMat = mRgba.submat(rect);
-
-                        if (bFirstFaceSaved == false) {
-                            SaveImage(mROIMat);
-                            bFirstFaceSaved = true;
-                        }
-
-                        // resize it to the dest rect size (100x100)
-                        sSize.width = 100;
-                        sSize.height = 100;
-                        Imgproc.resize(mROIMat, mFaceResized, sSize);
-                        // copy it to dest rect in main image
-
-                        mFaceResized.copyTo(mFaceDest);
-
-                        // compare the histogram of this face with the histogram
-                        // of the previous face. If they are a good match (ie
-                        // return val of comparison is > 0.9) then they are probably
-                        // the same face. We already saved this face before, so
-                        // don't save it again. If the previous version was blurry
-                        // and this one is sharp, the coefficient of similarness
-                        // is around 0.7 to 0.85 so the the most recent face will
-                        // be saved this means if some pics of this face are blurry
-                        // and some are sharp, we save both, so one result should be
-                        // sharp.
-
-                        matFaceHistogramThis.copyTo(matFaceHistogramPrevious);
-
-                        matFaceHistogramThis = getHistogram(mFaceDest);
-
-                        // this test makes sure we don't do a compare on the first face found
-                        // because the width of the previous face will be zero
-                        if (matFaceHistogramThis.width() == matFaceHistogramPrevious.width()) {
-
-                            d = Imgproc.compareHist(matFaceHistogramThis, matFaceHistogramPrevious, Imgproc.CV_COMP_CORREL);
-                            //Log.d("Baz", "compareHist d = "+d);
-                            if (d < 0.95) {
-                                SaveImage(mROIMat);
-                                //Log.d("Baz", "New face: "+d);
-                            }
-                        }
-                    }
-                }
-
-                if (bDisplayTitle)
-                    ShowTitle("Face Detection", 1, colorGreen);
-
-                break;
-
-            case VIEW_MODE_GFTT:
-
-                Imgproc.cvtColor(mRgba, mGray, Imgproc.COLOR_RGBA2GRAY);
-
-                // DON'T do a gaussian blur here, it makes the results poorer and
-                // takes 0.5 off the fps rate
-
-                Imgproc.goodFeaturesToTrack(mGray, MOPcorners, iGFFTMax, 0.01, 20);
-
-                y = MOPcorners.rows();
-
-                corners = MOPcorners.toList();
-
-                for (int x = 0; x < y; x++)
-                    Imgproc.circle(mRgba, corners.get(x), 6, colorRed, iLineThickness - 1);
-                //DrawCross (mRgba, colorRed, corners.get(x));
-
-                if (bDisplayTitle)
-                    ShowTitle("Track Features", 1, colorGreen);
-
-                break;
-
 
             case VIEW_MODE_OPFLOW:
 
